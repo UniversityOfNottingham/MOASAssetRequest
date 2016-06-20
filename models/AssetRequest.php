@@ -21,18 +21,14 @@ class AssetRequest extends Omeka_Record_AbstractRecord
 
     /** @const */
     static $REQUESTER_ORG_TYPES = [
-        1 => 'Personal use',
-        2 => 'NGO or charity representative',
-        3 => 'Community group',
-        4 => 'School or university educator',
-        5 => 'Museum or heritage organisation',
-        6 => 'Government official',
-        7 => 'Journalist',
-        8 => 'Other'
+        1 => 'NGO or charity representative',
+        2 => 'Community group',
+        3 => 'School or university educator',
+        4 => 'Museum or heritage organisation',
+        5 => 'Government official',
+        6 => 'Journalist',
+        7 => 'Other'
     ];
-
-    /** @const */
-    static $REQUESTER_ORG_TYPES_CUTOFF = 2;
 
     public function _validate()
     {
@@ -71,10 +67,9 @@ class AssetRequest extends Omeka_Record_AbstractRecord
         }
 
         // requester_org
-        // required string if not personal org type
+        // required string
         $orgValidator = new Zend_Validate_StringLength(['min' => 1]);
-        if ($this->requester_org_type >= AssetRequest::$REQUESTER_ORG_TYPES_CUTOFF &&
-            ($this->requester_org === null || !$orgValidator->isValid($this->requester_org))) {
+        if ($this->requester_org === null || !$orgValidator->isValid($this->requester_org)) {
             $this->addError('requester_org', __('You must enter an organisation name'));
         }
 
