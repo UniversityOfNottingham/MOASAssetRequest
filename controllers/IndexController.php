@@ -21,13 +21,6 @@ class MOASAssetRequest_IndexController extends Omeka_Controller_AbstractActionCo
         $this->_helper->db->setDefaultModelName('AssetRequest');
     }
 
-    public function orginisationAction()
-    {
-        /** @var AssetRequest $class */
-        $class = $this->_helper->db->getDefaultModelName();
-        $this->_helper->json($class::$REQUESTER_ORG_TYPES);
-    }
-
     public function requestAction()
     {
         $response = [];

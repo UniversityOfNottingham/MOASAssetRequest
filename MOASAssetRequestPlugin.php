@@ -11,12 +11,19 @@
 class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
 {
     protected $_hooks = array(
+        'initialize',
         'install',
         'uninstall',
         'uninstall_message',
         'upgrade',
-        'define_routes'
+        'define_routes',
+        'public_head'
     );
+    
+    public function hookInitialize()
+    {
+        add_shortcode('asset_request_button', array($this, 'assetRequestButtonShortCode'));
+    }
 
     public function hookInstall()
     {
@@ -70,6 +77,35 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
     {
         $args['router']->addConfig(new Zend_Config_Ini(
             __DIR__.'/routes.ini'
+        ));
+    }
+
+    public function hookPublicHead($args)
+    {
+        queue_css_file('assetrequest');
+        queue_js_file('assetrequest');
+    }
+
+    /**
+     * @param $args
+     * @param Omeka_View $view
+     * @return string
+     */
+    public function assetRequestButtonShortCode($args, $view)
+    {
+        $record = new AssetRequest();
+        $record->record_id = $args['id'];
+
+        $csrf = new Omeka_Form_SessionCsrf;
+
+        $intro = get_theme_option('reuse_form_intro');
+        $terms = get_theme_option('reuse_form_tsandcs');
+
+        return $view->partial('index/request.php', array(
+            'asset_request' => $record,
+            'csrf' => $csrf,
+            'formIntro' => $intro,
+            'formTerms' => $terms
         ));
     }
 }
