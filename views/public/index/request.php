@@ -59,7 +59,7 @@
       </div>
     
       <div class="modal__form-row modal__form-row--right">
-        <h6 class="error visually-hidden js-validation-message js-form-error"><?= __('Please check you\'ve entered all your information.'); ?></h6>
+        <h6 class="error visually-hidden js-validation-message js-form-error"><?= __('Please check you\'ve entered all your information.'); ?></h6><br>
         <h6 class="error visually-hidden js-validation-message js-terms-error"><?= __('Please confirm that you agree to the terms and conditions.'); ?></h6>
       </div>
     

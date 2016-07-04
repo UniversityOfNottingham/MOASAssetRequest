@@ -20,7 +20,7 @@ class AssetRequest extends Omeka_Record_AbstractRecord
     public $accept_terms;
 
     /** @const */
-    static $REQUESTER_ORG_TYPES = [
+    public static $REQUESTER_ORG_TYPES = [
         1 => 'NGO or charity representative',
         2 => 'Community group',
         3 => 'School or university educator',
