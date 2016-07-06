@@ -42,10 +42,11 @@ echo head($head);
     <script type="application/javascript">
         jQuery(document).ready( function ($) {
             $('#asset-request-table').DataTable({
-                dom: 'lfrtipB',
                 buttons: [
                     'pdf', 'csv'
-                ]
+                ],
+                dom: 'lfrtipB',
+                stateSave: true
             });
         } )
     </script>
