@@ -104,7 +104,9 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookAdminHead($args)
     {
         queue_css_file('datatables.min');
+        queue_css_file('asset-request');
         queue_js_file('datatables.min');
+        queue_js_file('datatables/pagination/input');
     }
 
     public function filterAdminNavigationMain($nav)

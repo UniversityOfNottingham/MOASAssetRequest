@@ -45,7 +45,8 @@ echo head($head);
                 buttons: [
                     'pdf', 'csv'
                 ],
-                dom: 'lfrtipB',
+                dom: 'lftipB',
+                pagingType: 'input',
                 stateSave: true
             });
         } )
