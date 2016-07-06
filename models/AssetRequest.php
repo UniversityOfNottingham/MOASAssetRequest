@@ -30,6 +30,10 @@ class AssetRequest extends Omeka_Record_AbstractRecord
         7 => 'Other'
     ];
 
+    protected $_related = array(
+        'Item' => 'getItem'
+    );
+
     public function _validate()
     {
         // record_id
@@ -78,5 +82,11 @@ class AssetRequest extends Omeka_Record_AbstractRecord
         if ($this->accept_terms === null || $this->accept_terms === 0) {
             $this->addError('accept_terms', __('You must accept the terms and conditions'));
         }
+    }
+
+    public function getItem()
+    {
+        $lk_id = (int) $this->record_id;
+        return $this->getTable('Item')->find($lk_id);
     }
 }

@@ -22,7 +22,14 @@ echo head($head);
         <tbody>
         <?php foreach (loop('asset_requests') as $assetRequest): ?>
             <tr>
-                <td><?php echo $assetRequest->record_id; ?></td>
+                <td><?php if (!is_null($item = $assetRequest->Item)): ?>
+                        <a href="<?php echo html_escape(record_url($item)); ?>">
+                            <?php echo metadata($item, array('Dublin Core', 'Title')); ?>
+                        </a>
+                    <?php else: ?>
+                        <i>N/A</i>
+                    <?php endif; ?>
+                </td>
                 <td><?php echo $assetRequest->requester_name . ' (' . $assetRequest->requester_org . ')' ?></td>
                 <td><?php echo $assetRequest->requester_org_type; ?></td>
                 <td><?php echo __('%s',
@@ -40,7 +47,7 @@ echo head($head);
                     'pdf', 'csv'
                 ]
             });
-        } );
+        } )
     </script>
 <?php endif; ?>
 <?php echo foot(); ?>
