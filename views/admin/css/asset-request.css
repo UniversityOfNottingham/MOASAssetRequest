@@ -5,3 +5,13 @@
 .visually-hidden {
     display: none !important;
 }
+
+.dataTables_wrapper .dataTables_filter {
+    float: left !important;
+    text-align: left !important;
+}
+
+.dataTables_paginate > .pagination > li > a {
+    color: #C76941 !important;
+    cursor: pointer !important;
+}

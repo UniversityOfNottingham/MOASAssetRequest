@@ -1,14 +1,8 @@
 /**
- * Sometimes for quick navigation, it can be useful to allow an end user to
- * enter which page they wish to jump to manually. This paging control uses a
- * text input box to accept new paging numbers (arrow keys are also allowed
- * for), and four standard navigation buttons are also presented to the end
- * user.
+ *  Match Omekas pagination styles.
  *
- *  @name Navigation with text input
- *  @summary Shows an input element into which the user can type a page number
- *  @author [Allan Jardine](http://sprymedia.co.uk)
- *  @author [Gordey Doronin](http://github.com/GDoronin)
+ *  This is based of the [Input Plugin](https://github.com/DataTables/Plugins/blob/master/pagination/input.js) created
+ *  by [Allan Jardine](http://sprymedia.co.uk)
  *
  *  @example
  *    $(document).ready(function() {
@@ -29,8 +23,8 @@
         var page = all ? 0 : Math.ceil(start / length);
         var pages = all ? 1 : Math.ceil(visibleRecords / length);
 
-        var disableFirstPrevClass = (page > 0 ? '' : oSettings.oClasses.sPageButtonDisabled);
-        var disableNextLastClass = (page < pages - 1 ? '' : oSettings.oClasses.sPageButtonDisabled);
+        var disableFirstPrevClass = (page > 0 ? '' : 'visually-hidden');
+        var disableNextLastClass = (page < pages - 1 ? '' : 'visually-hidden');
 
         return {
             'previous': disableFirstPrevClass,
@@ -50,28 +44,26 @@
     var nextClassName = 'next';
 
     var paginateClassName = 'paginate';
-    var paginateOfClassName = 'paginate_of';
-    var paginatePageClassName = 'paginate_page';
-    var paginateInputClassName = 'paginate_input';
 
     $.fn.dataTableExt.oPagination.input = {
         'fnInit': function (oSettings, nPaging, fnCallbackDraw) {
+            var nPaginationWrapper = document.createElement('ul');
+            nPaginationWrapper.className = 'pagination';
+            var nPreviousWrapper = document.createElement('li');
+            nPreviousWrapper.className = 'pagination_previous';
             var nPrevious = document.createElement('a');
+            var nNextWrapper = document.createElement('li');
+            nNextWrapper.className = 'pagination_next';
             var nNext = document.createElement('a');
+            var nInputWrapper = document.createElement('li');
+            nInputWrapper.className = 'page-input';
             var nInput = document.createElement('input');
             var nOf = document.createElement('span');
 
-            var language = oSettings.oLanguage.oPaginate;
-            var classes = oSettings.oClasses;
-
-            nPrevious.innerHTML = language.sPrevious;
-            nNext.innerHTML = language.sNext;
-
-            nPrevious.className = previousClassName + ' ' + classes.sPageButton;
-            nNext.className = nextClassName + ' ' + classes.sPageButton;
-
-            nOf.className = paginateOfClassName;
-            nInput.className = paginateInputClassName;
+            nPrevious.innerHTML = 'Previous Page';
+            nNext.innerHTML = 'Next Page';
+            nOf.innerHTML = 'of ';
+            nOf.className = 'pagination_current';
 
             if (oSettings.sTableId !== '') {
                 nPaging.setAttribute('id', oSettings.sTableId + '_' + paginateClassName);
@@ -81,10 +73,17 @@
 
             nInput.type = 'text';
 
-            nPaging.appendChild(nPrevious);
-            nPaging.appendChild(nInput);
-            nPaging.appendChild(nOf);
-            nPaging.appendChild(nNext);
+            nPreviousWrapper.appendChild(nPrevious);
+            nNextWrapper.appendChild(nNext);
+            nInputWrapper.appendChild(nInput);
+            nInputWrapper.appendChild(nOf);
+
+            nPaginationWrapper.appendChild(nPreviousWrapper);
+            nPaginationWrapper.appendChild(nInputWrapper);
+            nPaginationWrapper.appendChild(nNextWrapper);
+
+
+            nPaging.appendChild(nPaginationWrapper);
 
             $(nPrevious).click(function() {
                 var iCurrentPage = calcCurrentPage(oSettings);
@@ -158,23 +157,23 @@
 
             var disableClasses = calcDisableClasses(oSettings);
 
-            $(an).show();
+            $(an).show(oSettings.oClasses.sPageButtonDisabled);
 
             // Enable/Disable `prev` button.
-            $(an).children('.' + previousClassName)
-                .removeClass(oSettings.oClasses.sPageButtonDisabled)
-                .addClass(disableClasses[previousClassName]);
+            $(an).find('.pagination_previous')
+                .removeClass('visually-hidden')
+                .addClass(disableClasses['previous']);
 
             // Enable/Disable `next` button.
-            $(an).children('.' + nextClassName)
-                .removeClass(oSettings.oClasses.sPageButtonDisabled)
-                .addClass(disableClasses[nextClassName]);
+            $(an).find('.pagination_next')
+                .removeClass('visually-hidden')
+                .addClass(disableClasses['next']);
 
             // Paginate of N pages text
-            $(an).children('.' + paginateOfClassName).html(' of ' + iPages);
+            $(an).find('.pagination_current').html(' of ' + iPages);
 
             // Current page number input value
-            $(an).children('.' + paginateInputClassName).val(iCurrentPage);
+            $(an).find('.page-input > input').val(iCurrentPage);
         }
     };
 })(jQuery);
