@@ -12,7 +12,7 @@ class MOASAssetRequest_AdminController extends Omeka_Controller_AbstractActionCo
     public function indexAction()
     {
         // Always go to browse.
-        $this->_helper->redirector('browse');
+        $this->forward('browse');
         return;
     }
 
@@ -22,10 +22,5 @@ class MOASAssetRequest_AdminController extends Omeka_Controller_AbstractActionCo
     public function init()
     {
         $this->_helper->db->setDefaultModelName('AssetRequest');
-    }
-
-    public function browseAction()
-    {
-        parent::browseAction();
     }
 }
