@@ -43,12 +43,30 @@ echo head($head);
         jQuery(document).ready( function ($) {
             $('#asset-request-table').DataTable({
                 buttons: [
-                    'pdf', 'csv'
+                    {
+                        extend: 'csv',
+                        text: 'Download CSV',
+                        className: 'small blue button'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'Download PDF',
+                        className: 'small blue button'
+                    }
                 ],
-                dom: 'lfptpB',
+                dom: '<"top"flp>t<"bottom"Bp>',
                 pagingType: 'input',
                 stateSave: true
             });
+
+            // The datatables plugin adds classes for styling to certain elements. The easiest way to force Omeka styles
+            // onto these elements is to remove the datatable classes. These have no impact on the plugins functionality.
+            $('.dt-button.buttons-html5')
+                .removeClass('dt-button')
+                .removeClass('buttons-csv')
+                .removeClass('buttons-pdf')
+                .removeClass('buttons-html5');
+            $('.dataTables_filter > label > input').attr('type', 'text');
         } )
     </script>
 <?php endif; ?>
