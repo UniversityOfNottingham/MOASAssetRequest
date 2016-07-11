@@ -2,8 +2,12 @@
 
     var assetRequest = {
 
-        initialise: function () {
+        itemId: null,
+        downloadToken: null,
+
+        initialise: function (item_id) {
             var self = this;
+            self.itemId = item_id;
 
             // setup clicking on the 'use' button
             $('.js-use').on('click', function() {
@@ -30,13 +34,49 @@
                 self.submitRequest();
             });
 
+            $('#download-resource-form').submit(function(e) {
+                e.preventDefault();
+                self.submitDownload();
+            });
+
             this._setupHashDetection();
             this._setupTermsAndConditions();
         },
 
         submitRequest: function() {
+            var self = this;
+
+            if (this._validateRequest()) {
+                var formData = $('#use-resource-form').serialize();
+
+                $.post('/asset/'+ this.itemId, formData, function(data, textStatus, xhr) {
+                    if (data.fields !== undefined) {
+                        if (data.fields.download_token !== null) {
+                            $('.useresource__form').toggleClass('visually-hidden');
+                            $('.useresource__download').toggleClass('visually-hidden');
+                            self.downloadToken = data.fields.download_token;
+                        } else {
+                            $('.useresource__form').toggleClass('visually-hidden');
+                            $('.useresource__contact').toggleClass('visually-hidden');
+                        }
+                    }
+                });
+            }
+        },
+
+        submitDownload: function () {
+            var formData = $('#download-resource-form').serialize();
+            $.post('/asset/download/' + this.downloadToken, formData, function(data, textStatus, xhr) {
+                console.log(data);
+            });
+        },
+
+        _validateRequest: function() {
             var formErrors = !!($('#requester_name').val() === '' || $('#requester_org').val() === '' || $('#requester_org_type option:selected').val() === '0'),
                 acceptTerms = ($('#accept_terms').prop('checked')) ? true : false;
+
+            $('.js-form-error').hide();
+            $('.js-terms-error').hide();
 
             if (formErrors) {
                 $('.js-form-error').slideDown(200, 'easeInOutCubic');
@@ -46,10 +86,9 @@
                 $('.js-terms-error').slideDown(200, 'easeInOutCubic');
             }
 
-            if (formErrors || !acceptTerms) return;
+            if (!formErrors || acceptTerms) return true;
 
-            var formData = $(this).serialize();
-            console.log(formData);
+            return false;
         },
 
         _setupHashDetection: function() {
@@ -89,6 +128,6 @@
         },
     };
 
-    $(assetRequest.initialise());
+    $(assetRequest.initialise(w.item_id));
 
 }(window, document, window.jQuery));

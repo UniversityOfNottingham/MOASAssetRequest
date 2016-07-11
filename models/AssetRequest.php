@@ -20,7 +20,7 @@ class AssetRequest extends Omeka_Record_AbstractRecord
     public $accept_terms;
 
     /** @const */
-    public static $REQUESTER_ORG_TYPES = [
+    protected static $REQUESTER_ORG_TYPES = [
         1 => 'NGO or charity representative',
         2 => 'Community group',
         3 => 'School or university educator',
@@ -29,6 +29,20 @@ class AssetRequest extends Omeka_Record_AbstractRecord
         6 => 'Journalist',
         7 => 'Other'
     ];
+
+    protected $_related = array(
+        'Item' => 'loadItem'
+    );
+    
+    public static function getRequesterOrgTypes() 
+    {
+        return self::$REQUESTER_ORG_TYPES;
+    }
+
+    public function loadItem()
+    {
+        return $this->getDb()->getTable('item')->find($this->record_id);
+    }
 
     public function _validate()
     {
@@ -47,7 +61,7 @@ class AssetRequest extends Omeka_Record_AbstractRecord
 
         // token
         // meets token requirements (exactly 16 characters)
-        $tokenValidator = new Zend_Validate_StringLength(['min' => 16, 'max' => 16]);
+        $tokenValidator = new Zend_Validate_StringLength(['min' => 32, 'max' => 32]);
         if ($this->download_token !== null && !$tokenValidator->isValid($this->download_token)) {
             $this->addError('download_token', __('Download token not valid'));
         }
@@ -78,5 +92,15 @@ class AssetRequest extends Omeka_Record_AbstractRecord
         if ($this->accept_terms === null || $this->accept_terms === 0) {
             $this->addError('accept_terms', __('You must accept the terms and conditions'));
         }
+    }
+    
+    public function generateDownloadToken()
+    {
+        return md5(
+            mt_rand(1,1000000)
+            . $this->record_id
+            . $this->requester_name
+            . mt_rand(1,1000000)
+        );
     }
 }

@@ -33,7 +33,7 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
               `record_id` int(10) unsigned NOT NULL,
               `added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-              `download_token` varchar(16) COLLATE utf8_unicode_ci,
+              `download_token` varchar(32) COLLATE utf8_unicode_ci,
               `requester_name` tinytext NOT NULL COLLATE utf8_unicode_ci,
               `requester_org` tinytext NOT NULL COLLATE utf8_unicode_ci,
               `requester_org_type` tinytext NOT NULL COLLATE utf8_unicode_ci,
@@ -101,11 +101,14 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
         $intro = get_theme_option('reuse_form_intro');
         $terms = get_theme_option('reuse_form_tsandcs');
 
+        $email = metadata('item', array('MOAS Elements', 'Download Contact'), array('all' => true));
+
         return $view->partial('index/request.php', array(
             'asset_request' => $record,
             'csrf' => $csrf,
             'formIntro' => $intro,
-            'formTerms' => $terms
+            'formTerms' => $terms,
+            'contact' => (is_array($email) && key_exists(0, $email)) ? $email[0] : ""
         ));
     }
 }
