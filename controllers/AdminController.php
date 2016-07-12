@@ -7,6 +7,7 @@
  * @license     MIT
  * @author      James Hodgson <james.hodgson@nottingham.ac.uk>
  */
+
 class MOASAssetRequest_AdminController extends Omeka_Controller_AbstractActionController
 {
     public function indexAction()
