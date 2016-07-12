@@ -10,6 +10,7 @@
 
 class MOASAssetRequest_IndexController extends Omeka_Controller_AbstractActionController
 {
+    protected static $DOWNLOAD_CUTOFF = 5;
 
     protected $_autoCsrfProtection = true;
 
@@ -55,10 +56,9 @@ class MOASAssetRequest_IndexController extends Omeka_Controller_AbstractActionCo
 
                     // This amounts to "if the metadata is download, or if it's a certain type of organisation and
                     // contact isn't explicitly stated.
-                    if ($option === 'Download' ||
-                        ($option !== 'Contact' &&
-                            array_search($record->requester_org_type, $class::getRequesterOrgTypes()) < 5
-                        )) {
+                    if ($option === 'Download'
+                        || ($option !== 'Contact' && AssetRequest::getRequesterOrgTypes() < self::$DOWNLOAD_CUTOFF)
+                    ) {
                         $record->download_token = $record->generateDownloadToken();
                         $record->save();
                     }
