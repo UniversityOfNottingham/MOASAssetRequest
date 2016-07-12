@@ -34,11 +34,6 @@
                 self.submitRequest();
             });
 
-            $('#download-resource-form').submit(function(e) {
-                e.preventDefault();
-                self.submitDownload();
-            });
-
             this._setupHashDetection();
             this._setupTermsAndConditions();
         },
@@ -54,7 +49,9 @@
                         if (data.fields.download_token !== null) {
                             $('.useresource__form').toggleClass('visually-hidden');
                             $('.useresource__download').toggleClass('visually-hidden');
+
                             self.downloadToken = data.fields.download_token;
+                            $('#download-resource-form').attr('action', '/asset/download/' + self.downloadToken);
                         } else {
                             $('.useresource__form').toggleClass('visually-hidden');
                             $('.useresource__contact').toggleClass('visually-hidden');
@@ -62,13 +59,6 @@
                     }
                 });
             }
-        },
-
-        submitDownload: function () {
-            var formData = $('#download-resource-form').serialize();
-            $.post('/asset/download/' + this.downloadToken, formData, function(data, textStatus, xhr) {
-                console.log(data);
-            });
         },
 
         _validateRequest: function() {
