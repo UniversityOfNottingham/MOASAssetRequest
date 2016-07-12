@@ -17,8 +17,14 @@ class MOASAssetRequest_ZipArchive
 {
     public static $ZIP_PATH = 'asset_download';
 
+    /** @var string The absolute filesystem path to the zip file */
+    public $path;
+
+    /** @var string The intended filename (including extension) of the zip file to be represented to the client. */
+    public $name;
+
     /** @var AssetRequest */
-    protected $asset_request;
+    protected $assetRequest;
 
     /** @var Omeka_Storage */
     protected $storage;
@@ -28,7 +34,7 @@ class MOASAssetRequest_ZipArchive
 
     public function __construct(AssetRequest $assetRequest, Omeka_Storage $storage = null)
     {
-        $this->asset_request = $assetRequest;
+        $this->assetRequest = $assetRequest;
         $this->storage = ($storage === null) ? Zend_Registry::get('storage') : $storage;
 
         $this->_setupStorage();
@@ -43,16 +49,18 @@ class MOASAssetRequest_ZipArchive
      */
     protected function _prepare()
     {
-        $filePath = self::$ZIP_PATH . DIRECTORY_SEPARATOR . $this->asset_request->record_id . '.zip';
-        if ($this->storage->isFile($filePath)) {
-            return;
-        }
-        
-        // create zip file
-        $zipPath = $this->_createZip($this->asset_request->Item->Files);
+        $filePath = self::$ZIP_PATH . DIRECTORY_SEPARATOR . $this->assetRequest->record_id . '.zip';
 
-        // store it in files folder
-        $this->storage->store($zipPath, $filePath);
+        if ( ! $this->storage->isFile($filePath)) {
+            // create zip file
+            $zipPath = $this->_createZip($this->assetRequest->Item->Files);
+
+            // store it in files folder
+            $this->storage->store($zipPath, $filePath);
+        }
+
+        $this->name = $this->_getFilename();
+        $this->path = $this->storage->getLocalPath($filePath);
     }
 
     /**
@@ -62,7 +70,7 @@ class MOASAssetRequest_ZipArchive
     private function _createZip(array $assets)
     {
         $zip = new ZipArchive();
-        $tmpPath = $this->storage->getTempDir() . DIRECTORY_SEPARATOR . $this->asset_request->record_id . '.zip';
+        $tmpPath = $this->storage->getTempDir() . DIRECTORY_SEPARATOR . $this->assetRequest->record_id . '.zip';
 
         if ( ! $zip->open($tmpPath, ZipArchive::CREATE)) {
             throw new Omeka_Storage_Exception("Unable to create temporary zip file at " . $tmpPath);
@@ -81,6 +89,21 @@ class MOASAssetRequest_ZipArchive
         }
 
         return $tmpPath;
+    }
+    
+    private function _getFilename()
+    {
+        /** @var Item $name */
+        $item = $this->assetRequest->Item;
+
+        $titleText = $item->getElementTexts('Dublin Core', 'Title');
+        if (count($titleText) > 0) {
+            $title = $titleText[0]->getText();
+
+            return $title . '.zip';
+        }
+
+        return 'Your download.zip';
     }
 
     /**

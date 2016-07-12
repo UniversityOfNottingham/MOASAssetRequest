@@ -83,10 +83,43 @@ class MOASAssetRequest_IndexController extends Omeka_Controller_AbstractActionCo
 
         if (isset($record) && $this->getRequest()->isPost()) {
             if ($csrf->isValid($_POST)) {
-                // bundle assets.
+
+                // disable default hadndling of the view
+                $this->view->layout()->disableLayout();
+                $this->_helper->viewRenderer->setNoRender(true);
+
+                // bundle assets
                 $zip = new MOASAssetRequest_ZipArchive($record);
                 
-                // stream assets.
+                // stream asset zip
+                /**
+                 * I attempted to get this working with a proper zend framework method but it wasn't having any of it
+                 * and was giving the error :-
+                 *
+                 * PHP message: PHP Fatal error:  Unknown: Cannot use output buffering in output buffering display
+                 * handlers in Unknown on line 0
+                 *
+                 * $response = Zend_Controller_Front::getInstance()->getResponse();
+                 * $response->setHeader('Content-Type', 'application/zip', true);
+                 * $response->setHeader('Content-Disposition', 'attachment; filename="' . $zip->name . '"', true);
+                 * $response->setHeader('Content-Length', filesize($zip->path), true);
+                 * readfile($zip->path);
+                 */
+
+                header('Content-Type: application/zip', true);
+                header('Content-Disposition: attachment; filename="' . $zip->name . '"', true);
+                header('Content-Length: ' . filesize($zip->path), true);
+
+                $obLevel   = ob_get_level();
+                if ($obLevel > 0) {
+                    do {
+                        ob_get_clean();
+                        $obLevel = ob_get_level();
+                    } while ($obLevel > 0);
+                }
+
+                readfile($zip->path);
+                exit();
             }
         } else {
             throw new Omeka_Controller_Exception_404;
