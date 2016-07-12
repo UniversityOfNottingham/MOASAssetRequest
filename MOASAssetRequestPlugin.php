@@ -17,7 +17,13 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
         'uninstall_message',
         'upgrade',
         'define_routes',
-        'public_head'
+        'public_head',
+        'define_acl',
+        'admin_head'
+    );
+
+    protected $_filters = array(
+        'admin_navigation_main'
     );
     
     public function hookInitialize()
@@ -84,6 +90,32 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
     {
         queue_css_file('assetrequest');
         queue_js_file('assetrequest');
+    }
+
+    public function hookDefineAcl($args)
+    {
+        $acl = $args['acl'];
+        $indexResource = new Zend_Acl_Resource('MOASAssetRequest_Admin');
+        $acl->add($indexResource);
+
+        $acl->allow(array('super', 'admin'), array('MOASAssetRequest_Admin'));
+    }
+
+    public function hookAdminHead($args)
+    {
+        queue_css_file('datatables.min');
+        queue_css_file('asset-request');
+        queue_js_file('datatables.min');
+        queue_js_file('datatables/pagination/input');
+    }
+
+    public function filterAdminNavigationMain($nav)
+    {
+        $nav[] = array(
+            'label' => __('MOAS Asset Requests'),
+            'uri' => url('asset-requests'),
+        );
+        return $nav;
     }
 
     /**

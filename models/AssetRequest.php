@@ -31,17 +31,12 @@ class AssetRequest extends Omeka_Record_AbstractRecord
     ];
 
     protected $_related = array(
-        'Item' => 'loadItem'
+        'Item' => 'getItem'
     );
     
     public static function getRequesterOrgTypes() 
     {
         return self::$REQUESTER_ORG_TYPES;
-    }
-
-    public function loadItem()
-    {
-        return $this->getDb()->getTable('item')->find($this->record_id);
     }
 
     public function _validate()
@@ -93,14 +88,20 @@ class AssetRequest extends Omeka_Record_AbstractRecord
             $this->addError('accept_terms', __('You must accept the terms and conditions'));
         }
     }
-    
+
+    public function getItem()
+    {
+        $lk_id = (int) $this->record_id;
+        return $this->getTable('Item')->find($lk_id);
+    }
+
     public function generateDownloadToken()
     {
         return md5(
-            mt_rand(1,1000000)
+            mt_rand(1, 1000000)
             . $this->record_id
             . $this->requester_name
-            . mt_rand(1,1000000)
+            . mt_rand(1, 1000000)
         );
     }
 }
