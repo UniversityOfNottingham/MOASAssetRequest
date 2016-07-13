@@ -20,7 +20,8 @@ echo head($head);
         </tr>
         </thead>
         <tbody>
-        <?php foreach (loop('asset_requests') as $assetRequest): ?>
+        <?php /** @var AssetRequest $assetRequest */
+        foreach (loop('asset_requests') as $assetRequest): ?>
             <tr>
                 <td><?php if (!is_null($item = $assetRequest->Item)): ?>
                         <a href="<?php echo html_escape(record_url($item)); ?>">
@@ -31,7 +32,8 @@ echo head($head);
                     <?php endif; ?>
                 </td>
                 <td><?php echo $assetRequest->requester_name . ' (' . $assetRequest->requester_org . ')' ?></td>
-                <td><?php echo $assetRequest->requester_org_type; ?></td>
+                <td><?php $orgTypes = $assetRequest->getRequesterOrgTypes();
+                        echo $orgTypes[$assetRequest->requester_org_type] ?></td>
                 <td><?php echo __('%s',
                         html_escape(format_date($assetRequest->added, Zend_Date::DATE_LONG))); ?>
                 </td>
