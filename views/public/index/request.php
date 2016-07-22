@@ -73,8 +73,7 @@
       </form>
     </div>
     <div class="modal__content useresource__download visually-hidden">
-      <p>We are able to offer this resource as a zip file download. The zip file will contain the original resources that
-      make up this item.</p>
+      <p><?= __('Download all the resources in this item as a Zip file.'); ?></p>
       <form class="modal__form" id="download-resource-form" action="" method="post">
         <?= $csrf ?>
 
@@ -84,9 +83,8 @@
       </form>
     </div>
     <div class="modal__content useresource__contact visually-hidden">
-      <p>The rights holder for this image has chosen to be contacted on a per-request basis. You can contact them at
-      <a href="mailto:<?= $contact ?>"
-        ><?= $contact ?></a></p>
+      <p><?= __('Please contact the rights holder to use this resource.'); ?></p>
+      <p><a href="mailto:<?= $contact ?>"><?= $contact ?></a></p>
     </div>
   </div>
 </div>
