@@ -55,7 +55,7 @@
 
         <div class="modal__form-row modal__form-row--float-right">
           <input type="checkbox" id="accept_terms" name="accept_terms" value="1" <?php echo $asset_request->accept_terms ? 'checked="checked"' : '' ?>>
-          <label class="modal__label--small" for="accept_terms"><?= __('I accept the <a href="#" class="js-show-terms">Terms and Conditions</a>.'); ?></label>
+          <label class="modal__label modal__label--small" for="accept_terms"><?= __('I accept the <a href="#" class="js-show-terms">Terms and Conditions</a>.'); ?></label>
         </div>
 
         <div class="modal__terms js-terms">

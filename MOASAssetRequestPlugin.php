@@ -25,7 +25,7 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
     protected $_filters = array(
         'admin_navigation_main'
     );
-    
+
     public function hookInitialize()
     {
         add_shortcode('asset_request_button', array($this, 'assetRequestButtonShortCode'));
@@ -88,8 +88,8 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
 
     public function hookPublicHead($args)
     {
-        queue_css_file('assetrequest');
-        queue_js_file('assetrequest');
+        queue_css_file('assetrequest.min');
+        queue_js_file('assetrequest.min');
     }
 
     public function hookDefineAcl($args)
@@ -104,7 +104,7 @@ class MOASAssetRequestPlugin extends Omeka_Plugin_AbstractPlugin
     public function hookAdminHead($args)
     {
         queue_css_file('datatables.min');
-        queue_css_file('asset-request');
+        queue_css_file('assetrequest.min');
         queue_js_file('datatables.min');
         queue_js_file('datatables/pagination/input');
     }
