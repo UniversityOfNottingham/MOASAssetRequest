@@ -20,19 +20,24 @@ class AssetRequest extends Omeka_Record_AbstractRecord
     public $accept_terms;
 
     /** @const */
-    static $REQUESTER_ORG_TYPES = [
-        1 => 'Personal use',
-        2 => 'NGO or charity representative',
-        3 => 'Community group',
-        4 => 'School or university educator',
-        5 => 'Museum or heritage organisation',
-        6 => 'Government official',
-        7 => 'Journalist',
-        8 => 'Other'
+    protected static $REQUESTER_ORG_TYPES = [
+        1 => 'NGO or charity representative',
+        2 => 'Community group',
+        3 => 'School or university educator',
+        4 => 'Museum or heritage organisation',
+        5 => 'Government official',
+        6 => 'Journalist',
+        7 => 'Other'
     ];
 
-    /** @const */
-    static $REQUESTER_ORG_TYPES_CUTOFF = 2;
+    protected $_related = array(
+        'Item' => 'getItem'
+    );
+    
+    public static function getRequesterOrgTypes() 
+    {
+        return self::$REQUESTER_ORG_TYPES;
+    }
 
     public function _validate()
     {
@@ -51,7 +56,7 @@ class AssetRequest extends Omeka_Record_AbstractRecord
 
         // token
         // meets token requirements (exactly 16 characters)
-        $tokenValidator = new Zend_Validate_StringLength(['min' => 16, 'max' => 16]);
+        $tokenValidator = new Zend_Validate_StringLength(['min' => 32, 'max' => 32]);
         if ($this->download_token !== null && !$tokenValidator->isValid($this->download_token)) {
             $this->addError('download_token', __('Download token not valid'));
         }
@@ -71,10 +76,9 @@ class AssetRequest extends Omeka_Record_AbstractRecord
         }
 
         // requester_org
-        // required string if not personal org type
+        // required string
         $orgValidator = new Zend_Validate_StringLength(['min' => 1]);
-        if ($this->requester_org_type >= AssetRequest::$REQUESTER_ORG_TYPES_CUTOFF &&
-            ($this->requester_org === null || !$orgValidator->isValid($this->requester_org))) {
+        if ($this->requester_org === null || !$orgValidator->isValid($this->requester_org)) {
             $this->addError('requester_org', __('You must enter an organisation name'));
         }
 
@@ -83,5 +87,21 @@ class AssetRequest extends Omeka_Record_AbstractRecord
         if ($this->accept_terms === null || $this->accept_terms === 0) {
             $this->addError('accept_terms', __('You must accept the terms and conditions'));
         }
+    }
+
+    public function getItem()
+    {
+        $lk_id = (int) $this->record_id;
+        return $this->getTable('Item')->find($lk_id);
+    }
+
+    public function generateDownloadToken()
+    {
+        return md5(
+            mt_rand(1, 1000000)
+            . $this->record_id
+            . $this->requester_name
+            . mt_rand(1, 1000000)
+        );
     }
 }

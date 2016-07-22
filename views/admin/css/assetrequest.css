@@ -1,0 +1,54 @@
+.visually-hidden {
+    display: none !important;
+}
+
+.dataTables_wrapper > div.top > div.dataTables_filter {
+    float: left !important;
+    text-align: left !important;
+    padding-top: 0px !important;
+}
+
+.dataTables_wrapper > div.top >.dataTables_filter label,
+.dataTables_wrapper > div.top >.dataTables_filter input {
+    display: inline-block;
+    vertical-align: bottom;
+    margin-bottom: 0px;
+}
+
+.dataTables_wrapper > div.top >.dataTables_length {
+    padding-top: 0px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+    padding-top: 0px;
+    height: auto;
+}
+
+.dataTables_wrapper .dataTables_paginate > .pagination {
+    margin-bottom: 0px;
+}
+
+.dataTables_wrapper .dataTables_paginate > .pagination > li > a {
+    color: #C76941 !important;
+    cursor: pointer !important;
+}
+
+.dataTables_wrapper > div.top {
+    margin-bottom: 5px;
+    height: 28px;
+}
+
+.dataTables_wrapper > div.top >div.dataTables_length {
+    margin-left: 10px;
+    padding-top: 10px;
+}
+
+.dataTables_wrapper > div.bottom {
+    margin-top: 15px;
+    height: 30px;
+}
+
+.dataTables_wrapper > div.bottom >div.dt-buttons > a {
+    margin-bottom: 0px;
+}
+
