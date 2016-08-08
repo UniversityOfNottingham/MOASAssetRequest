@@ -1,6 +1,6 @@
 MOASAssetRequest
 ===============
-[![Release](https://img.shields.io/badge/stable-v1.0.0-blue.svg)](https://github.com/UniversityOfNottingham/MOASAssetRequest/releases/latest)
+[![Release](https://img.shields.io/badge/stable-v1.2.1-blue.svg)](https://github.com/UniversityOfNottingham/MOASAssetRequest/releases/latest)
 [![License](https://img.shields.io/badge/licence-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://scrutinizer-ci.com/g/UniversityOfNottingham/MOASAssetRequest/badges/build.png?b=master)](https://scrutinizer-ci.com/g/UniversityOfNottingham/MOASAssetRequest/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/UniversityOfNottingham/MOASAssetRequest/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/UniversityOfNottingham/MOASAssetRequest/?branch=master)
