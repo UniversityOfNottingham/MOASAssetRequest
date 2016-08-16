@@ -84,8 +84,6 @@ class MOASAssetRequest_ZipArchive
             }
         } catch (Exception $ex) {
             throw new Omeka_Storage_Exception("Error whilst adding files to zip file at " . $tmpPath, 500, $ex);
-        } finally {
-            $zip->close();
         }
 
         return $tmpPath;
