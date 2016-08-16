@@ -1,6 +1,6 @@
 {
   "name": "moas-assetrequest",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Omeka plugin to add download functionality to still image items",
   "scripts": {
     "start": "gulp"
