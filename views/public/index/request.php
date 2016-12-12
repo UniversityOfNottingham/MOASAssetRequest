@@ -1,7 +1,3 @@
-<div class="item-title__use">
-  <button class="use js-use"><?= __('Use this resource'); ?></button>
-</div>
-
 <div class="modal js-close-modal">
   <div class="modal__box js-modal-content">
     <script type="text/javascript">
@@ -87,4 +83,8 @@
       <p><a href="mailto:<?= $contact ?>"><?= $contact ?></a></p>
     </div>
   </div>
+</div>
+
+<div class="item-title__use">
+  <button class="use js-use"><?= __('Use this resource'); ?></button>
 </div>
